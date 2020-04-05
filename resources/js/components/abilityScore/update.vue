@@ -1,7 +1,7 @@
 <template>
     <v-form v-model="valid">
         <v-alert v-if="success" type="success" :value="true" dismissible>
-            Adcionado com sucesso!
+            Atualizado com sucesso!
         </v-alert>
         <v-container>
             <v-row>
@@ -50,7 +50,7 @@
                 outlined
                 block
                 color="indigo"
-                >Adicionar</v-btn
+                >Salvar</v-btn
             >
         </v-container>
     </v-form>
@@ -94,15 +94,15 @@ export default {
         submit() {
             self = this;
             axios
-                .post(
-                    "http://localhost/blog/public/api/ability-score",
+                .put(
+                    "http://localhost/blog/public/api/ability-score/"+this.$route.params.slug,
                     self.form
                 )
                 .then(response => {
                     self.form = {}; //Clear input fields.
                     self.loaded = true;
                     self.success = true;
-                    
+                    this.$router.go(-1)
                 })
                 .catch(error => {
                     self.loaded = true;
@@ -113,8 +113,11 @@ export default {
         }
     },
     mounted() {
-        
-        console.log("Component mounted.");
+        self = this
+          $.getJSON('http://localhost/blog/public/api/ability-score/'+this.$route.params.slug, function(data) {
+            console.log(data);
+            self.form = data;
+        });
     }
 };
 </script>

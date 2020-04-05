@@ -1,26 +1,41 @@
 <template>
-    <div class="container">
-        <div>
-            <h4>Ability Score</h4>
-            <router-link to="/ability-score/create" tag="button" class="btn btn-primary float-right">
-                Adcionar
-            </router-link>
-        </div>
-        <div>
-            
-        <ul class="list-group list-group-flush">
-            <li v-for="ability in abilitys" :key="ability.slug" class="list-group-item">
-                {{ ability.full_name}} 
-                <div class="float-right">
-                <button class="btn btn-sm btn-default" title="Editar"><i class="far fa-edit"></i></button>
-                <button v-on:click="del(ability)" class="btn btn-sm btn-default" title="Excluir"><i class="far fa-trash-alt"></i></button>
-                </div>
-            </li>
-            
-        </ul>
-        </div>
-        <button type="button" @click="$router.go(-1)" class="btn btn-primary">Voltar</button>
-    </div>
+   <v-container >
+      
+       <v-list>
+           
+       
+      <v-list-item
+        v-for="item in abilitys"
+        :key="item.slug"
+        @click=""
+      >
+        <v-list-item-avatar>
+          <v-icon v-text="item.name"></v-icon>
+        </v-list-item-avatar>
+
+        <v-list-item-content>
+          <v-list-item-title v-text="item.name"></v-list-item-title>
+          <v-list-item-subtitle v-text="item.full_name"></v-list-item-subtitle>
+        </v-list-item-content>
+
+        <v-list-item-action>
+            <v-row inline >
+
+                <v-btn @click="editar(item)" icon>
+                    <v-icon color="grey lighten-1">mdi-pencil</v-icon>
+                </v-btn>
+                <v-btn @click="del(item)" icon>
+                    <v-icon color="grey lighten-1">mdi-delete-outline</v-icon>
+                </v-btn>
+            </v-row>
+        </v-list-item-action>
+      </v-list-item>
+      <v-divider inset></v-divider>
+      </v-list>
+
+    <v-btn to="/ability-score/create" class="ma-2 d-flex" outlined block color="indigo">Adicionar</v-btn>
+   </v-container>
+    
 </template>
 
 <script>
@@ -32,21 +47,28 @@ export default {
         };
     },
     methods: {
-        del(item){
+        editar(item){
+            this.$router.push('/ability-score/'+item.slug);
 
-            self= this
-            axios.delete('http://localhost/blog/public/api/ability-score/'+item.id).then(response=>{
-                self.$router.go();
-            })
+        },
+        del(item) {
+            self = this;
+            axios
+                .delete(
+                    "http://localhost/blog/public/api/ability-score/" + item.id
+                )
+                .then(response => {
+                    self.$router.go();
+                });
         }
     },
     mounted() {
-        self= this;
+        self = this;
         $.getJSON(this.api, function(data) {
             console.log(data);
             self.abilitys = data;
         });
-        console.log("Component mounted.");
+        console.log(abilitys);
     }
 };
 </script>

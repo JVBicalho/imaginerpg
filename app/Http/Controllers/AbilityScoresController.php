@@ -56,7 +56,7 @@ class AbilityScoresController extends Controller
     public function show($id)
     {
         //
-        $ability = AbilityScore::findOrfail($id);
+        $ability = AbilityScore::where('slug',$id)->first();
         return response()->json($ability, 200);
     }
 
@@ -89,7 +89,7 @@ class AbilityScoresController extends Controller
             'full_name' => 'required|string',
             'desc' => 'required|string',
         ]);
-        $ability= AbilityScore::findOrFaill($request->all());
+        $ability= AbilityScore::where('slug',$id)->first();
         $ability->fill($request->all());
         $ability->save();
         return response()->json($ability, 200);
